@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  app-dev:
+    build:
+      context: .
+      target: development
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm run db:push &&
+        npm run db:generate &&
+        npm run dev
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db/boilerplate
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+
+  app-staging:
+    build:
+      context: .
+      target: staging
+    command: npm start
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+
+  app-prod:
+    build:
+      context: .
+      target: production
+    command: npm start
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: boilerplate
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
