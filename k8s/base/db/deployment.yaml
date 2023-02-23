@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  replicas: 2
+  minReadySeconds: 30
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        envFrom:
+        - configMapRef:
+            name: postgres-config
+        ports:
+        - containerPort: 5432
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always

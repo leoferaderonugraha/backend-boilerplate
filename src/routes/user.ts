@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 const router: Router = Router();
-const userModel = new UserModel(prisma.user);
+const userModel = new UserModel(prisma);
 
 
 async function signup(req: Request, res: Response)

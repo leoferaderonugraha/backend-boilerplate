@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-boilerplate
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: backend-boilerplate
+  replicas: 2
+  minReadySeconds: 30
+  template:
+    metadata:
+      labels:
+        app: backend-boilerplate
+    spec:
+      containers:
+      - name: backend-boilerplate
+        image: lfnugraha/backend-boilerplate
+        env:
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_DB
+          - name: DB_USER
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_USER
+          - name: DB_PASS
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_PASSWORD
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: dev-secret
+                key: secret_key
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always

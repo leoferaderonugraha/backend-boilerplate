@@ -5,3 +5,9 @@ interface MessageQueue<T>
   delete(item: T): Promise<void>;
   size(): Promise<number>;
 }
+
+
+export
+{
+  MessageQueue,
+}
