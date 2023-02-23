@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  app-dev:
+  app:
     build:
       context: .
       target: development
@@ -24,34 +24,8 @@ services:
     depends_on:
       - db
 
-  app-staging:
-    build:
-      context: .
-      target: staging
-    command: npm start
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    depends_on:
-      - db
-
-  app-prod:
-    build:
-      context: .
-      target: production
-    command: npm start
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    depends_on:
-      - db
-
   db:
-    image: postgres:15-alpine
+    image: postgres:15.2
     restart: always
     environment:
       POSTGRES_USER: postgres

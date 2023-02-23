@@ -3,26 +3,26 @@ import { Model } from './model';
 
 
 class UserModel implements Model<any, User> {
-  constructor(private readonly client: PrismaClient['user']) {}
+  constructor(private readonly client: PrismaClient) {}
 
   async create(data: any): Promise<User>
   {
-    return this.client.create({ data });
+    return this.client.user.create({ data });
   }
 
   async findOne(where: any): Promise<User | null>
   {
-    return this.client.findUnique({ where });
+    return this.client.user.findUnique({ where });
   }
 
   async delete(where: any): Promise<User>
   {
-    return this.client.delete({ where });
+    return this.client.user.delete({ where });
   }
 
   async update(where: any, data: any): Promise<User>
   {
-    return this.client.update({ where, data });
+    return this.client.user.update({ where, data });
   }
 }
 
